@@ -6,10 +6,6 @@ from .serializers import BlogPostSerializer
 
 
 class BlogPostView(APIView):
-    def get(self, request):
-        posts = BlogPost.objects.all()
-        serializer = BlogPostSerializer(posts, many=True)
-        return Response({"posts": serializer.data})
 
     def post(self, request):
         blogpost = request.data.get('blogpost')
@@ -36,3 +32,16 @@ class BlogPostView(APIView):
         return Response({
             "message": "Article with id `{}` has been deleted.".format(pk)
         }, status=204)
+
+    def get(self, request, pk):
+        # Get object with this pk
+        blogpost = get_object_or_404(BlogPost.objects.all(), pk=pk)
+        serializer = BlogPostSerializer(blogpost)
+        return Response({"blogpost": serializer.data})
+
+
+class BlogPostArrayView(APIView):
+    def get(self, request):
+        posts = BlogPost.objects.all()
+        serializer = BlogPostSerializer(posts, many=True)
+        return Response({"posts": serializer.data})
