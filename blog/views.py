@@ -1,8 +1,13 @@
+from django_filters.rest_framework import filters
+from django_filters import rest_framework as filters
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import BlogPost
-from .serializers import BlogPostSerializer
+
+from .models import BlogPost, Author
+from .serializers import BlogPostSerializer, UserSerializer, UserPostsSerializer, AuthorPostsSerializer, PostSerializer
 
 
 class BlogPostView(APIView):
@@ -45,3 +50,46 @@ class BlogPostArrayView(APIView):
         posts = BlogPost.objects.all()
         serializer = BlogPostSerializer(posts, many=True)
         return Response({"posts": serializer.data})
+
+
+class BlogPostListView(generics.ListAPIView):
+    serializer_class = BlogPostSerializer
+
+    def get_queryset(self):
+        username = self.kwargs['username']
+        user = get_object_or_404(Author.objects.all(), name=username)
+        authorid = getattr(user, 'id')
+        return BlogPost.objects.filter(author_id=authorid)
+
+
+class UsersView(APIView):
+    def get(self, request):
+        users = Author.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response({"users": serializer.data})
+
+
+class UserView(APIView):
+    def get(self, request, name):
+        # Get object with this pk
+        user = get_object_or_404(Author.objects.all(), name=name)
+        serializer = UserSerializer(user)
+        return Response({"user": serializer.data})
+
+
+class UserPostsView(APIView):
+    def get(self, request, name):
+        # Get object with this pk
+        user = get_object_or_404(Author.objects.all(), name=name)
+        serializer = UserPostsSerializer(user)
+        return Response(serializer.data)
+
+
+class AuthorPostsView(APIView):
+    def get(self, request, name):
+        # Get object with this pk
+        user = get_object_or_404(Author.objects.all(), name=name)
+        serializer = AuthorPostsSerializer(user)
+        return Response(serializer.data)
+
+
