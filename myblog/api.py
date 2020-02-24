@@ -1,7 +1,7 @@
 from rest_framework import routers
-from blog import api_views as myapp_views
+
+from blog import views as myapp_views
 
 router = routers.DefaultRouter()
-router.register('posts', myapp_views.BlogPostNewViewset)
+router.register('posts', myapp_views.BlogPostViewset)
 router.register('users', myapp_views.UserViewset)
-

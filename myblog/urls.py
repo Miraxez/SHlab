@@ -20,6 +20,6 @@ from myblog.api import router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('blog.urls')),
+    path('api/v1/', include('blog.urls')),
     path('api/v1/', include(router.urls)),
 ]
