@@ -18,8 +18,17 @@ from django.urls import path, include
 
 from myblog.api import router
 
+api_urlpatterns = [
+    path('accounts/', include('rest_registration.api.urls')),
+]
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('blog.urls')),
     path('api/v1/', include(router.urls)),
+    path('api/auth/', include('djoser.urls.authtoken')),
+    path('api/v1/', include(api_urlpatterns)),
 ]
+
+

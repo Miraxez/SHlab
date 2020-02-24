@@ -17,6 +17,10 @@ class AuthorPostsSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    owner = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
     class Meta:
         model = Author
         fields = ['id', 'name', 'email']

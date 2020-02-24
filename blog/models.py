@@ -1,7 +1,16 @@
+from django.conf import settings
 from django.db import models
 
 
-class Author(models.Model):
+class OwnedModel(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              on_delete=models.CASCADE, default=0)
+
+    class Meta:
+        abstract = True
+
+
+class Author(OwnedModel):
     name = models.CharField(max_length=255)
     email = models.EmailField()
 
@@ -9,7 +18,7 @@ class Author(models.Model):
         return self.name
 
 
-class BlogPost(models.Model):
+class BlogPost(OwnedModel):
     title = models.CharField(max_length=120)
     description = models.TextField()
     body = models.TextField()
@@ -17,5 +26,3 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
-
-
