@@ -3,9 +3,13 @@ from .models import BlogPost, Author
 
 
 class PostSerializer(serializers.ModelSerializer):
+    owner = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
     class Meta:
         model = BlogPost
-        fields = ['id', 'title', 'description', 'body', 'author']
+        fields = ['id', 'title', 'description', 'body', 'author', 'owner']
 
 
 class AuthorPostsSerializer(serializers.ModelSerializer):
@@ -23,4 +27,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ['id', 'name', 'email']
+        fields = ['id', 'name', 'email', 'owner']

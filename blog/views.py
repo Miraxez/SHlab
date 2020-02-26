@@ -13,7 +13,7 @@ from .serializers import AuthorPostsSerializer, PostSerializer
 
 
 class BlogPostViewset(viewsets.ModelViewSet):
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [IsOwner, IsAuthenticated]
     queryset = models.BlogPost.objects.all()
     serializer_class = serializers.PostSerializer
     filterset_fields = ('author', 'title')
@@ -27,7 +27,7 @@ class UserViewset(viewsets.ModelViewSet):
 
 
 class UserPostsView(APIView):
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [IsOwner, IsAuthenticated]
 
     def get(self, request, user_id):
         posts = BlogPost.objects.all().filter(author=user_id)
@@ -36,7 +36,7 @@ class UserPostsView(APIView):
 
 
 class UserProfileView(APIView):
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [IsOwner, IsAuthenticated]
 
     def get(self, request, name):
         user = get_object_or_404(Author.objects.all(), name=name)
