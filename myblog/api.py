@@ -4,4 +4,4 @@ from blog import views as myapp_views
 
 router = routers.DefaultRouter()
 router.register('posts', myapp_views.BlogPostViewset)
-router.register('users', myapp_views.UserViewset)
+router.register('users', myapp_views.UserViewSet)
